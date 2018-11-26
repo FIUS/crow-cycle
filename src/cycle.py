@@ -2,6 +2,7 @@
 
 import argparse
 import random
+import csv
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('names',
@@ -44,5 +45,12 @@ def create_cycle(p_names):
     return pairs
 
 
+def save_pairs(pairs):
+    with open('murder_pairs.csv', 'w') as f:
+        for key in pairs.keys():
+            f.write("%s,%s\n" % (key, pairs[key]))
+
+
 names_list = read_names_from_file(args.names)
 murder_pairs = create_cycle(names_list)
+save_pairs(murder_pairs)
