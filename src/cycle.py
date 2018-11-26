@@ -45,6 +45,11 @@ def create_cycle(p_names):
     return pairs
 
 
+def print_pairs(pairs):
+    for key in pairs.keys():
+        print("%s ---[kills]---> %s" % (key, pairs[key]))
+
+
 def save_pairs(pairs):
     with open('murder_pairs.csv', 'w') as f:
         for key in pairs.keys():
@@ -53,4 +58,5 @@ def save_pairs(pairs):
 
 names_list = read_names_from_file(args.names)
 murder_pairs = create_cycle(names_list)
+print_pairs(murder_pairs)
 save_pairs(murder_pairs)
