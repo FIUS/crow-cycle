@@ -24,6 +24,7 @@ optional arguments:
                         line is allowed. Names may contain spaces. If not
                         specified, the input is read from the standard input.
   -o OUTPUT, --output OUTPUT
-                        Path to the output file. If not specified, the output
-                        is written to the standard output.
+                        Path to the output file. Output is json. If not
+                        specified, the output is written to the standard
+                        output.
 ```

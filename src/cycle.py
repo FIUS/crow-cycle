@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
-import csv
+import json
 import random
 import sys
 
@@ -14,7 +14,7 @@ parser.add_argument('-i', '--input',
                          'If not specified, the input is read from the standard input.')
 parser.add_argument('-o', '--output',
                     type=argparse.FileType('w'),
-                    help='Path to the output file. '
+                    help='Path to the output file. Output is json. '
                          'If not specified, the output is written to the standard output.')
 args = parser.parse_args()
 
@@ -26,8 +26,8 @@ def read_lines_from_input(file):
     :return: A list of the names contained in the provided text file
     """
     if file is None:
-        file = sys.stdin.readlines()
-    return map(lambda l: l.strip(), file)
+        file = sys.stdin
+    return map(lambda l: l.strip(), file.readlines())
 
 
 def create_cycle(p_names):
@@ -50,20 +50,12 @@ def create_cycle(p_names):
     return pairs
 
 
-def pairs_to_csv(pair_list):
-    for first, second in pair_list:
-        yield "{},{}".format(first, second)
-
-
-def write_lines_to_output(file, lines):
+def write_to_output(file, str):
     if file is None:
         file = sys.stdout
-    for l in lines:
-        file.write(l)
-        file.write('\n')
+    file.write(str)
 
 
 names_list = read_lines_from_input(args.input)
 murder_pairs = create_cycle(names_list)
-murder_csv = pairs_to_csv(murder_pairs)
-write_lines_to_output(args.output, murder_csv)
+write_to_output(args.output, json.dumps(murder_pairs))
