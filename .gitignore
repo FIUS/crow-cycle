@@ -104,5 +104,4 @@ venv.bak/
 .mypy_cache/
 
 # Program output
-/src/*.csv
-/src/*.txt
+*.pdf
