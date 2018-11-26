@@ -21,7 +21,13 @@ It takes a list of the participants' names as input and creates a PDF containing
 
 * Clone this repo.
 * Put your participants' names into [names.txt](names.txt).
-* Run `./crow-cycle.py -i names.txt --desc 'Game 1'`
+* Run `./crow-cycle.py -i names.txt --desc 'Game 1' -o crow-cycle.pdf`.
+
+Alternatively to writing the resulting PDF to *crow-cycle.pdf*, you can write it to *stdout*, for example in order to print it:
+
+```bash
+./crow-cycle.py -i names.txt --desc 'Game 1' | lpr
+```
 
 ### Details for `./crow-cycle.py`
 
@@ -38,7 +44,9 @@ optional arguments:
                         line is allowed. Names may contain spaces. If not
                         specified, the input is read from the standard input.
   -o OUTPUT, --output OUTPUT
-                        Path to the output file. Output is pdf.
+                        Path to the output file. Output is pdf. If not
+                        specified, the output is written to the standard
+                        output.
   --desc DESC           Description that is printed in every table row.
 ```
 
