@@ -48,13 +48,13 @@ def create_cycle(p_names):
 
 def print_pairs(pairs):
     for first, second in pairs:
-        print("%s ---[kills]---> %s" % (first, second))
+        print("{} ---[kills]---> {}".format(first, second))
 
 
 def save_pairs(pairs):
     with open('murder_pairs.csv', 'w') as f:
         for first, second in pairs:
-            f.write("%s,%s\n" % (first, second))
+            f.write("{},{}\n".format(first, second))
 
 
 def save_pairs_seperated(pairs):
@@ -65,8 +65,8 @@ def save_pairs_seperated(pairs):
     with open('murderers.txt', 'w') as murderer_file:
         with open('targets.txt', 'w') as targets_file:
             for first, second in pairs:
-                murderer_file.write("%s\n" % first)
-                targets_file.write("%s\n" % second)
+                murderer_file.write("{}\n".format(first))
+                targets_file.write("{}\n".format(second))
 
 
 names_list = read_names_from_file(args.names)
