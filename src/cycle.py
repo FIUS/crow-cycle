@@ -56,7 +56,21 @@ def save_pairs(pairs):
             f.write("%s,%s\n" % (key, pairs[key]))
 
 
+def save_pairs_seperated(pairs):
+    """
+    Prints murder-target pairs into seperate text files for easy copying.
+    :param pairs: A dictionary of murder-target pairs.
+    """
+    with open('murderers.txt', 'w') as murderer_file:
+        with open('targets.txt', 'w') as targets_file:
+            for key in pairs.keys():
+                murderer_file.write("%s\n" % key)
+                targets_file.write("%s\n" % pairs[key])
+
+
+
 names_list = read_names_from_file(args.names)
 murder_pairs = create_cycle(names_list)
 print_pairs(murder_pairs)
 save_pairs(murder_pairs)
+save_pairs_seperated(murder_pairs)

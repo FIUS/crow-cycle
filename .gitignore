@@ -105,3 +105,4 @@ venv.bak/
 
 # Program output
 /src/*.csv
+/src/*.txt
