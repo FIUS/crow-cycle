@@ -3,6 +3,12 @@
 \usepackage{fullpage}
 \usepackage{array}
 \usepackage{longtable}
+\usepackage{atbegshi}
+\AtBeginShipoutFirst{%
+  \AtBeginShipout{%
+    \AtBeginShipoutOriginalShipout\null
+  }%
+}
 
 \begin{document}
 
