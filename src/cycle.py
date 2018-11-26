@@ -33,27 +33,28 @@ def create_cycle(p_names):
     :param p_names: A list of names from which to create pairs of murderers and people to be murdered
     :return: A mapping from murderers to people to be murdered
     """
-    pairs = {}
+    pairs = []
     names = p_names.copy()  # Produce no side-effects by copying list
     random.shuffle(names)
 
     for i in range(-1, len(names) - 1):
-        murderer = names[i]
-        murdered = names[i + 1]
-        pairs[murderer] = murdered
+        murder_src = names[i]
+        murder_dst = names[i + 1]
+        pairs.append((murder_src, murder_dst))
 
+    random.shuffle(pairs)
     return pairs
 
 
 def print_pairs(pairs):
-    for key in pairs.keys():
-        print("%s ---[kills]---> %s" % (key, pairs[key]))
+    for first, second in pairs:
+        print("%s ---[kills]---> %s" % (first, second))
 
 
 def save_pairs(pairs):
     with open('murder_pairs.csv', 'w') as f:
-        for key in pairs.keys():
-            f.write("%s,%s\n" % (key, pairs[key]))
+        for first, second in pairs:
+            f.write("%s,%s\n" % (first, second))
 
 
 def save_pairs_seperated(pairs):
@@ -63,10 +64,9 @@ def save_pairs_seperated(pairs):
     """
     with open('murderers.txt', 'w') as murderer_file:
         with open('targets.txt', 'w') as targets_file:
-            for key in pairs.keys():
-                murderer_file.write("%s\n" % key)
-                targets_file.write("%s\n" % pairs[key])
-
+            for first, second in pairs:
+                murderer_file.write("%s\n" % first)
+                targets_file.write("%s\n" % second)
 
 
 names_list = read_names_from_file(args.names)
