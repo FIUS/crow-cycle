@@ -1,30 +1,33 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import random
-import csv
+import sys
 
+# If you change the arguments, please update the usage section in README.md
 parser = argparse.ArgumentParser(description='Process some integers.')
-parser.add_argument('names',
+parser.add_argument('-i', '--input',
                     type=argparse.FileType('r'),
-                    help='Path to a file containing names for creating a circle of "murderer-murdered" pairs.'
-                         'Only one name per line is allowed. Names may contain spaces.')
-
+                    help='Path to the file containing names for creating a circle of "murderer-murdered" pairs. '
+                         'Only one name per line is allowed. Names may contain spaces. '
+                         'If not specified, the input is read from the standard input.')
+parser.add_argument('-o', '--output',
+                    type=argparse.FileType('w'),
+                    help='Path to the output file. Output is json. '
+                         'If not specified, the output is written to the standard output.')
 args = parser.parse_args()
 
 
-def read_names_from_file(file):
+def read_lines_from_input(file):
     """
     Reads the provided file line by line to provide a list representation of the contained names.
-    :param file: A text file containing one name per line
+    :param file: A text file containing one name per line. If it's None, the input is read from the standard input.
     :return: A list of the names contained in the provided text file
     """
-    names_list = []
-
-    for line in file:
-        names_list.append(str(line).strip())
-
-    return names_list
+    if file is None:
+        file = sys.stdin
+    return map(lambda l: l.strip(), file.readlines())
 
 
 def create_cycle(p_names):
@@ -33,44 +36,26 @@ def create_cycle(p_names):
     :param p_names: A list of names from which to create pairs of murderers and people to be murdered
     :return: A mapping from murderers to people to be murdered
     """
-    pairs = {}
-    names = p_names.copy()  # Produce no side-effects by copying list
+    pairs = []
+    # Produce no side-effects by copying list
+    names = [name for name in p_names]
     random.shuffle(names)
 
     for i in range(-1, len(names) - 1):
-        murderer = names[i]
-        murdered = names[i + 1]
-        pairs[murderer] = murdered
+        murder_src = names[i]
+        murder_dst = names[i + 1]
+        pairs.append((murder_src, murder_dst))
 
+    random.shuffle(pairs)
     return pairs
 
 
-def print_pairs(pairs):
-    for key in pairs.keys():
-        print("%s ---[kills]---> %s" % (key, pairs[key]))
+def write_to_output(file, str):
+    if file is None:
+        file = sys.stdout
+    file.write(str)
 
 
-def save_pairs(pairs):
-    with open('murder_pairs.csv', 'w') as f:
-        for key in pairs.keys():
-            f.write("%s,%s\n" % (key, pairs[key]))
-
-
-def save_pairs_seperated(pairs):
-    """
-    Prints murder-target pairs into seperate text files for easy copying.
-    :param pairs: A dictionary of murder-target pairs.
-    """
-    with open('murderers.txt', 'w') as murderer_file:
-        with open('targets.txt', 'w') as targets_file:
-            for key in pairs.keys():
-                murderer_file.write("%s\n" % key)
-                targets_file.write("%s\n" % pairs[key])
-
-
-
-names_list = read_names_from_file(args.names)
+names_list = read_lines_from_input(args.input)
 murder_pairs = create_cycle(names_list)
-print_pairs(murder_pairs)
-save_pairs(murder_pairs)
-save_pairs_seperated(murder_pairs)
+write_to_output(args.output, json.dumps(murder_pairs))
